@@ -1,0 +1,67 @@
+@forward 'variables';
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  background-color: var(--main-black);
+  color: var(--main-white);
+  padding: 100px 0;
+}
+
+#app {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.movie-item-container {
+  display: grid;
+  grid-template-columns: 60px 1fr 1fr 1fr 150px;
+  grid-column-gap: 16px;
+  align-items: center;
+}
+
+.cinema-item-container {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 0.8fr;
+  grid-column-gap: 16px;
+  align-items: center;
+}
+
+.button-default {
+  border: 1px solid var(--main-white);
+  padding: 12px 8px;
+  background-color: var(--main-black);
+  color: var(--main-white);
+  cursor: pointer;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+a {
+  text-decoration: none;
+  color: var(--main-white);
+  text-decoration: underline;
+}
+
+.divider {
+  display: block;
+  height: 1px;
+  width: 100%;
+  background-color: var(--main-white);
+  margin: 16px 0;
+}
