@@ -1,5 +1,6 @@
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { defineStore } from 'pinia'
+
 import { type IMovieSessionInfo, movieSessionApi } from '@/api/movie-session'
 
 export const useMovieSessionStore = defineStore('movie-session-store', () => {

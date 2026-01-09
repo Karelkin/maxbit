@@ -1,19 +1,13 @@
 <script lang="ts" setup>
-import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 
 import type { ICinemaSession } from '@/api/cinemas'
-import { useMoviesStore } from '@/stores/movies-store'
+import { useMoviesService } from '@/services/movies-service'
 
 const router = useRouter()
 
-const moviesStore = useMoviesStore()
-
-const { movies } = storeToRefs(moviesStore)
-
-const { getMovieById, fetchMovies } = moviesStore
+const { getMovieById } = useMoviesService()
 
 defineProps<{
   time: string
@@ -26,12 +20,6 @@ function redirectToSession(cinemaId: number, sessionId: number) {
     params: { cinemaId, sessionId },
   })
 }
-
-onMounted(() => {
-  if (movies.value.length === 0) {
-    fetchMovies()
-  }
-})
 </script>
 
 <template>

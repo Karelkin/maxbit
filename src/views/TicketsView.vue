@@ -1,25 +1,20 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-import { useUserStore } from '@/stores/user-store'
-
-import TicketsItem from '@/components/tickets/TicketsItem.vue'
 import {
   BookingType,
-  movieSessionService,
+  useMovieSessionService,
   type ISessionFullInfo,
 } from '@/services/movie-session-service'
-import { storeToRefs } from 'pinia'
+import { useUserService } from '@/services/user-service'
+
+import TicketsItem from '@/components/tickets/TicketsItem.vue'
+
+const { getMovieSessionInfoById, getMappedUserBookings } = useMovieSessionService()
+const { userBookings, fetchSettings, fetchUserBookings } = useUserService()
 
 const isLoading = ref(true)
 const mappedBookings = ref<Map<BookingType, ISessionFullInfo[]>>(new Map())
-
-const userStore = useUserStore()
-
-const { userBookings } = storeToRefs(userStore)
-const { getMovieSessionInfoById, getMappedUserBookings } = movieSessionService
-
-const { fetchUserBookings, fetchSettings } = userStore
 
 async function updateBookings() {
   isLoading.value = true
@@ -32,7 +27,6 @@ async function updateBookings() {
 
   Promise.all(promises)
     .then((response) => {
-      console.log(response)
       mappedBookings.value = getMappedUserBookings(response)
     })
     .finally(() => {

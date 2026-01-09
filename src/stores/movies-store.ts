@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import dayjs from 'dayjs'
 
 import { moviesApi, type IMovie, type IMovieSession } from '@/api/movies'
 
@@ -9,33 +8,9 @@ export const useMoviesStore = defineStore('movies-store', () => {
   const movieSessions = ref<IMovieSession[]>([])
 
   const getMovieById = (id: number): IMovie | null =>
-    movies.value.find((movie) => movie.id === id) || null
+    movies.value.find((movie: IMovie) => movie.id === id) || null
 
-  const getMappedMovieSessions = (sessions: IMovieSession[]) => {
-    const mappedSessions = new Map<string, Map<number, IMovieSession[]>>()
-
-    sessions.forEach((session) => {
-      const date = dayjs(session.startTime).format('DD.MM')
-
-      if (mappedSessions.has(date)) {
-        const existingSessions = mappedSessions.get(date) || new Map<number, IMovieSession[]>()
-        const existingMovieSessions = existingSessions.get(session.cinemaId) || []
-
-        existingMovieSessions.push(session)
-        existingSessions.set(session.cinemaId, existingMovieSessions)
-        mappedSessions.set(date, existingSessions)
-      } else {
-        mappedSessions.set(
-          date,
-          new Map<number, IMovieSession[]>().set(session.cinemaId, [session]),
-        )
-      }
-    })
-
-    return mappedSessions
-  }
-
-  async function fetchMovies() {
+  async function fetchMovies(): Promise<void> {
     try {
       movies.value = await moviesApi.getMovies()
     } catch (error) {
@@ -43,7 +18,7 @@ export const useMoviesStore = defineStore('movies-store', () => {
     }
   }
 
-  async function fetchMovieSessions(id: number) {
+  async function fetchMovieSessions(id: number): Promise<void> {
     try {
       movieSessions.value = await moviesApi.getMovieSessionsById(id)
     } catch (error) {
@@ -56,7 +31,6 @@ export const useMoviesStore = defineStore('movies-store', () => {
     movieSessions,
 
     getMovieById,
-    getMappedMovieSessions,
 
     fetchMovies,
     fetchMovieSessions,

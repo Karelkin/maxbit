@@ -1,31 +1,21 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
 
-import { useCinemasStore } from '@/stores/cinemas-store'
-import { useMovieSessionStore } from '@/stores/movie-session-store'
-import { useMoviesStore } from '@/stores/movies-store'
 import { movieSessionApi, type ISeatBooking } from '@/api/movie-session'
-import { useUserStore } from '@/stores/user-store'
+import { useUserService } from '@/services/user-service'
+import { useCinemasService } from '@/services/cinemas-service'
+import { useMoviesService } from '@/services/movies-service'
+import { useMovieSessionService } from '@/services/movie-session-service'
 
 const route = useRoute()
 const router = useRouter()
 
-const moviesStore = useMoviesStore()
-const cinemaStore = useCinemasStore()
-const sessionStore = useMovieSessionStore()
-const userStore = useUserStore()
-
-const { movieSessionInfo } = storeToRefs(sessionStore)
-const { movies } = storeToRefs(moviesStore)
-const { cinemas } = storeToRefs(cinemaStore)
-const { isLoggedIn } = storeToRefs(userStore)
-
-const { getMovieById, fetchMovies } = moviesStore
-const { getCinemaById, fetchCinemas } = cinemaStore
-const { fetchMovieSessionInfo } = sessionStore
+const { isLoggedIn } = useUserService()
+const { cinemas, getCinemaById, fetchCinemas } = useCinemasService()
+const { movies, getMovieById, fetchMovies } = useMoviesService()
+const { movieSessionInfo, fetchMovieSessionInfo } = useMovieSessionService()
 
 const bookings = ref(new Map<string, ISeatBooking>())
 const bookedSeats = ref(new Map<string, ISeatBooking>())

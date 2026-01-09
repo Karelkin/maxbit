@@ -1,14 +1,11 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useMoviesStore } from '@/stores/movies-store'
+
+import { useMoviesService } from '@/services/movies-service'
 
 import MovieItem from '@/components/movies/MovieItem.vue'
 
-const moviesStore = useMoviesStore()
-
-const { movies } = storeToRefs(moviesStore)
-const { fetchMovies } = moviesStore
+const { movies, fetchMovies } = useMoviesService()
 
 onMounted(() => {
   fetchMovies()

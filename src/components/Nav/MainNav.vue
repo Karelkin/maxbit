@@ -1,19 +1,15 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { storeToRefs } from 'pinia'
 
+import { useUserService } from '@/services/user-service'
 import { NAV_LIST } from '@/consts'
-import { useUserStore } from '@/stores/user-store'
 
-import MainNavItemVue from '@/components/Nav/MainNavItem.vue'
+import MainNavItemVue from '@/components/nav/MainNavItem.vue'
 
 const router = useRouter()
 
-const userStore = useUserStore()
-
-const { isLoggedIn } = storeToRefs(userStore)
-const { logout } = userStore
+const { isLoggedIn, logout } = useUserService()
 
 const filteredNavList = computed(() => {
   if (isLoggedIn.value) {

@@ -3,15 +3,13 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { authApi } from '@/api/auth'
-import { useUserStore } from '@/stores/user-store'
+import { useUserService } from '@/services/user-service'
 
 import MainInput from '@/components/MainInput.vue'
 
 const router = useRouter()
 
-const userStore = useUserStore()
-
-const { setToken } = userStore
+const { setToken } = useUserService()
 
 const username = ref('')
 const password = ref('')

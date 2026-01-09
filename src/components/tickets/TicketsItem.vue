@@ -4,15 +4,12 @@ import dayjs from 'dayjs'
 
 import { type ISessionFullInfo } from '@/services/movie-session-service'
 import { bookingApi } from '@/api/booking'
-import { useUserStore } from '@/stores/user-store'
-import { storeToRefs } from 'pinia'
+import { useUserService } from '@/services/user-service'
 
 const props = defineProps<{ booking: ISessionFullInfo }>()
 const emit = defineEmits<{ 'update-tickets': [] }>()
 
-const userStore = useUserStore()
-
-const { settings } = storeToRefs(userStore)
+const { settings } = useUserService()
 
 const timeLeft = ref(0)
 const timerId = ref<number | null>(null)

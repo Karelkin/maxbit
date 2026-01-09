@@ -3,15 +3,13 @@ import { computed, reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { authApi } from '@/api/auth'
-import { useUserStore } from '@/stores/user-store'
+import { useUserService } from '@/services/user-service'
 
 import MainInput from '@/components/MainInput.vue'
 
 const router = useRouter()
 
-const userStore = useUserStore()
-
-const { setToken } = userStore
+const { setToken } = useUserService()
 
 const username = ref('')
 const password = ref('')
@@ -30,10 +28,12 @@ const isValidForm = computed(() => {
   return !formErrors.username && !formErrors.password && !formErrors.passwordConfirm
 })
 
-function validateForm() {
+function validateUsername() {
   formErrors.username =
     username.value.trim().length < 8 && username.value.trim().length > 0 ? 'Минимум 8 символов' : ''
+}
 
+function validatePassword() {
   if (
     (password.value.length < 8 && password.value.length > 0) ||
     !/[a-z]/.test(password.value) ||
@@ -44,12 +44,20 @@ function validateForm() {
   } else {
     formErrors.password = ''
   }
+}
 
+function validatePasswordConfirm() {
   if (password.value && passwordConfirm.value && password.value !== passwordConfirm.value) {
     formErrors.passwordConfirm = 'Пароли не совпадают'
   } else {
     formErrors.passwordConfirm = ''
   }
+}
+
+function validateForm() {
+  validateUsername()
+  validatePassword()
+  validatePasswordConfirm()
 }
 
 async function handleSubmit() {
@@ -81,7 +89,7 @@ async function handleSubmit() {
 
       <MainInput
         v-model="password"
-        id="password-confirm"
+        id="password"
         label="Пароль"
         type="password"
         :error="formErrors.password"
@@ -91,7 +99,7 @@ async function handleSubmit() {
       <MainInput
         v-model="passwordConfirm"
         id="password-confirm"
-        label="Пароль"
+        label="Подтверждение пароля"
         type="password"
         :error="formErrors.passwordConfirm"
         required

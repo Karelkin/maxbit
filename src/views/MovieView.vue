@@ -1,33 +1,30 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useMoviesStore } from '@/stores/movies-store'
-import { storeToRefs } from 'pinia'
+
+import { useMoviesService } from '@/services/movies-service'
 
 import MovieSessionItem from '@/components/movies/MovieSessionItem.vue'
+import { useCinemasService } from '@/services/cinemas-service'
 
 const route = useRoute()
 const router = useRouter()
 
-const moviesStore = useMoviesStore()
-
-const { movieSessions } = storeToRefs(moviesStore)
-
-const { getMovieById, getMappedMovieSessions, fetchMovies, fetchMovieSessions } = moviesStore
+const { movieSessions, getMovieById, fetchMovieWithSessions, getMappedMovieSessions } =
+  useMoviesService()
+const { cinemas, fetchCinemas } = useCinemasService()
 
 const movie = computed(() => getMovieById(Number(route.params.movieId)))
 
 onMounted(async () => {
-  if (!movie.value) {
-    await fetchMovies()
+  await fetchMovieWithSessions(Number(route.params.movieId))
 
-    if (!movie.value) {
-      return router.push('/')
-    }
+  if (movie.value === null || movieSessions.value.length === 0) {
+    router.replace('/')
   }
 
-  if (movie.value) {
-    await fetchMovieSessions(movie.value.id)
+  if (cinemas.value.length === 0) {
+    fetchCinemas()
   }
 })
 </script>

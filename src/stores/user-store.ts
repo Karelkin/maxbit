@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 import { userApi, type IBooking } from '@/api/user'
 import { settingsApi } from '@/api/settings'
+
 import { DEFAULT_BOOKING_PAYMENT_DELAY_IN_SECONDS } from '@/consts'
 
 export const useUserStore = defineStore('user-store', () => {
